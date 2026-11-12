@@ -1,80 +1,82 @@
-<h1 align=center>The King of Fighters 2002 Unlimited Match — port para Nintendo Switch</h1>
+<h1 align=center>The King of Fighters 2002 Unlimited Match — Nintendo Switch port</h1>
 
-Port nativo para Nintendo Switch de la versión de Xbox 360 (XBLA) de **The King of Fighters 2002 Unlimited Match**.
+**English** | [Español](README.es.md)
 
-No es un emulador. El código PowerPC del `default.xex` del juego se recompila estáticamente a C++ con
-[ReXGlue](https://github.com/rexglue/rexglue-sdk), se compila para la Switch con devkitPro/libnx, y el juego se
-dibuja con un backend Vulkan que corre sobre NVK (Mesa).
+A native Nintendo Switch port of the Xbox 360 (XBLA) version of **The King of Fighters 2002 Unlimited Match**.
+
+It is not an emulator. The PowerPC code in the game's `default.xex` is statically recompiled to C++ with
+[ReXGlue](https://github.com/rexglue/rexglue-sdk), built for the Switch with devkitPro/libnx, and the game is
+rendered by a Vulkan backend running on NVK (Mesa).
 
 > [!NOTE]
-> Este repositorio **no trae datos del juego ni código derivado del juego**. Necesitas tu propia copia del juego de
-> Xbox 360 (el paquete XBLA). La [página instaladora](https://tbittech.github.io/kof2002um-nx-installer/) la
-> convierte en los archivos que necesita la Switch.
+> This repository **contains no game data and no code derived from the game**. You need your own copy of the
+> Xbox 360 game (the XBLA package). The [installer page](https://tbittech.github.io/kof2002um-nx-installer/)
+> converts it into the files the Switch needs.
 
-## Estado
+## Status
 
-En desarrollo. En portátil, con los relojes de fábrica de la consola y sin overclock (CPU 1020 MHz, GPU 460 MHz,
-memoria 1331 MHz), una pelea completa va a ~58 FPS (antes ~45; el objetivo son 60 estables). Por debajo de 60 el
-juego va un poco más lento de lo normal, porque su lógica avanza un paso por cada cuadro dibujado.
+Work in progress. In handheld mode, at the console's stock clocks with no overclock (CPU 1020 MHz, GPU 460 MHz,
+memory 1331 MHz), a full fight runs at ~58 FPS (up from ~45; the target is a stable 60). Below 60 the game runs a
+little slower than normal, because its logic advances one step per drawn frame.
 
-**Mandos:** L+R+ZR abre el selector de mandos de la Switch (hasta 4 jugadores, Joy-Con sueltos o Pro Controller).
-Jugar de a dos todavía no se probó.
+**Controllers:** L+R+ZR opens the Switch controller applet (up to 4 players, detached Joy-Con or Pro Controller).
+Two-player play has not been tested yet.
 
-**Problemas conocidos:** con las mejoras del 11/11 todavía no se probó el modo dock (la medición anterior en dock,
-del 7/11, daba ~52–56 FPS).
+**Known issues:** dock mode has not been tested with the 11/11 improvements yet (the previous dock measurement,
+from 11/07, was ~52–56 FPS).
 
-**Arreglado (2026-11-07):** la pantalla de selección de personajes salía negra (sin grilla, fondo ni cursores), y
-faltaban el fondo y la interfaz de la pantalla de orden. Ahora se ven bien, sin costo de rendimiento en la pelea.
+**Fixed (2026-11-07):** the character select screen was black (no grid, background or cursors), and the team order
+screen was missing its background and UI. Both are drawn correctly now, with no cost to fight performance.
 
-El registro detallado está en [PORT_STATUS.md](PORT_STATUS.md) (lo más nuevo arriba).
+The detailed log is in [PORT_STATUS.md](PORT_STATUS.md) (Spanish, newest first).
 
-## Instalar en la Switch
+## Installing on the Switch
 
-La forma más fácil es la **página instaladora: <https://tbittech.github.io/kof2002um-nx-installer/>**. Le das tu
-paquete XBLA (o la carpeta extraída de él) y arma `kof2002um-nx.zip` con el NRO, el `.toml` y los archivos del juego,
-todo dentro de tu navegador: tu copia nunca se sube a ningún lado. Descomprímelo en `sdmc:/switch/` y queda así:
+The easiest way is the **installer page: <https://tbittech.github.io/kof2002um-nx-installer/>**. Give it your XBLA
+package (or the folder extracted from it) and it builds `kof2002um-nx.zip` with the NRO, the `.toml` and the game
+files, entirely inside your browser: your copy is never uploaded anywhere. Unzip it into `sdmc:/switch/` and you get:
 
 ```text
 /switch/kof2002um-nx/
   kof2002um-nx.nro
   kof2002um_nx.toml
-  game.nxpack + game.nxidx   (los archivos del juego, hechos a partir de tu copia)
+  game.nxpack + game.nxidx   (the game files, built from your copy)
 ```
 
-Ábrelo en modo aplicación completa (manteniendo **R** al abrir un juego instalado, o con un forwarder). El modo
-applet (Álbum) no da memoria suficiente.
+Launch it in full application mode (hold **R** while opening an installed title, or use a forwarder). Applet mode
+(Album) does not have enough memory.
 
-## Estructura
+## Layout
 
-| Ruta | Qué es |
+| Path | What it is |
 |---|---|
-| `src/recompiler/` | Manifiesto de ReXGlue, proyecto CMake y el código propio del port (hooks, soporte de autotest/bench) |
-| `tools/rexglue-sdk/` | SDK de ReXGlue con el runtime de Switch: capa Horizon, cambios al renderer Vulkan/NVK, contadores de rendimiento |
-| `tools/fetch_thirdparty.py` | Descarga las dependencias del SDK en sus commits fijados (`thirdparty_pins.txt`) |
-| `tools/kof_stfs_extract.py` | Extrae el paquete STFS de XBLA, incluso con un bloque faltante (ubica los bloques por SHA-1) |
-| `tools/xctd/` | Descomprime los archivos XCTD (LZX) del juego |
-| `tools/ghidra-scripts/` | Scripts de Ghidra headless usados para la ingeniería inversa |
-| `switch/kof2002um_nx.toml` | Configuración del runtime que va junto al NRO (el set actual orientado a 60 FPS) |
-| `bench/devkitnx-configs/` | Configuraciones del benchmark automático en la consola (devkitnx) |
+| `src/recompiler/` | ReXGlue manifest, CMake project and the port's own code (hooks, autotest/bench support) |
+| `tools/rexglue-sdk/` | ReXGlue SDK with the Switch runtime: Horizon layer, Vulkan/NVK renderer changes, performance counters |
+| `tools/fetch_thirdparty.py` | Downloads the SDK dependencies at their pinned commits (`thirdparty_pins.txt`) |
+| `tools/kof_stfs_extract.py` | Extracts the XBLA STFS package, even with a missing block (locates blocks by SHA-1) |
+| `tools/xctd/` | Decompresses the game's XCTD (LZX) files |
+| `tools/ghidra-scripts/` | Headless Ghidra scripts used for reverse engineering |
+| `switch/kof2002um_nx.toml` | Runtime configuration that goes next to the NRO (the current 60 FPS–oriented set) |
+| `bench/devkitnx-configs/` | Configurations for the automated on-console benchmark (devkitnx) |
 
-## Compilar (resumen)
+## Building (summary)
 
-1. Instala devkitPro (devkitA64 + libnx) y descarga las dependencias del SDK: `python tools/fetch_thirdparty.py`.
-2. Extrae tu paquete XBLA: `python -I tools/kof_stfs_extract.py <paquete> game/`, y después descomprime los
-   archivos XCTD con `tools/xctd/`.
-3. Corre el codegen de ReXGlue sobre tu `game/default.xex` con `src/recompiler/kof2002um_nx_manifest.toml`
-   (la salida va a `src/recompiler/generated/`, que nunca se sube al repo).
-4. Configura y compila `src/recompiler` con el preset de Switch de `CMakePresets.json`.
+1. Install devkitPro (devkitA64 + libnx) and download the SDK dependencies: `python tools/fetch_thirdparty.py`.
+2. Extract your XBLA package: `python -I tools/kof_stfs_extract.py <package> game/`, then decompress the XCTD
+   files with `tools/xctd/`.
+3. Run the ReXGlue codegen on your `game/default.xex` with `src/recompiler/kof2002um_nx_manifest.toml`
+   (the output goes to `src/recompiler/generated/`, which is never committed).
+4. Configure and build `src/recompiler` with the Switch preset from `CMakePresets.json`.
 
-## Créditos
+## Credits
 
-- [ReXGlue](https://github.com/rexglue/rexglue-sdk) y el proyecto [Xenia](https://github.com/xenia-project/xenia),
-  de cuyo código de GPU y kernel deriva el runtime.
-- [nfsmw-nx](https://github.com/StevensND/nfsmw-nx), otro port de ReXGlue a la Switch.
-- devkitPro, libnx y Mesa/NVK.
+- [ReXGlue](https://github.com/rexglue/rexglue-sdk) and the [Xenia](https://github.com/xenia-project/xenia)
+  project, whose GPU and kernel code the runtime derives from.
+- [nfsmw-nx](https://github.com/StevensND/nfsmw-nx), another ReXGlue port to the Switch.
+- devkitPro, libnx and Mesa/NVK.
 
-## Apoyo
+## Support
 
-Si te gusta mi trabajo y quieres apoyarme:
+If you like my work and want to support me:
 
-<a href="https://tecito.app/tebit"><img src="https://img.shields.io/badge/Invitame_un-tecito-6d4aff?style=for-the-badge" alt="Invitame un tecito" height="32"></a>
+<a href="https://tecito.app/tebit"><img src="https://img.shields.io/badge/Buy_me_a-tecito-6d4aff?style=for-the-badge" alt="Buy me a tecito" height="32"></a>

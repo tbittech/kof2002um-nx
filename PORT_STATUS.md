@@ -8,7 +8,12 @@
 - **Build para la SD**: `switch/kof2002um-nx-20261111b/` (NRO = `kof2002um-nx.nro` de las 19:28, con claim; TOML = el de 20261111 + `texture_cpu_copy_claim = true` + intervalo 8000). El usuario probó la run y dijo que anda perfecto.
 - **Dos mandos**: el driver (`input/switch/switch_input_driver.cpp`) configura `kPlayerCount` jugadores, slots Handheld/No1–No4 y L+R+ZR abre `hidLaShowControllerSupport`. **Nunca se probó con dos mandos.**
 - **Ojo**: `Set-Content -Encoding utf8` de PowerShell 5.1 escribe BOM y el runner rechaza el JSON; generar configs con sed.
-- **Próximo paso**: confirmar 16000 contra 8000 (×3); probar dos mandos en la consola.
+- **GitHub**: commit `2cfb90a` subido a tbittech/kof2002um-nx (README actualizado; `tools/export_github.py` ahora toma el TOML de `switch/kof2002um-nx-20261111b` y el README de `tools/github/README.md`).
+- **Lista robzilla10001/SwitchPorts** (2026-11-12): el port **ya está** (sección "Microsoft Xbox 360", fila "The King of Fighters 2002 Unlimited Match", v0.1.1, 07/11/2026). Las PRs de agregar/actualizar se aceptan seguido (formato: ver PR 55 o 58, se edita una fila del README; 🟢 = actualizado hace menos de 7 días). **Regla "English Only"**: no aceptan repos que no estén en inglés, y nuestro README está en español: hace falta un README en inglés (puede ir junto al español). Para actualizar la versión hace falta una release nueva (v0.1.2) en tbittech/kof2002um-nx.
+- **Borradores listos (2026-11-12, sin publicar)**: `tools/github/README.md` ahora en inglés y `tools/github/README.es.md` el español (enlaces entre ambos); notas de la release en `tools/release_v0.1.2.md` (assets: NRO + TOML de `switch/kof2002um-nx-20261111b/` y `switch/kof2002um-nx-forwarder.nsp`). Fila de SwitchPorts: línea 443 del README de robzilla10001/SwitchPorts (`0.1.1 | 07/11/2026` → `0.1.2 | 12/11/2026`); no hay fork en tbittech todavía.
+- **Próximo paso**:
+  1. Con el OK del usuario: export + push del README, release v0.1.2, fork de SwitchPorts y PR con la fila.
+  2. Confirmar 16000 contra 8000 (×3); probar dos mandos en la consola.
 
 ## Plan para los últimos ~1,5 ms y desglose de cp_post (2026-11-11, noche)
 
